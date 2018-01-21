@@ -15,9 +15,9 @@ def _shape_to_np(shape):
 def get_landmarks(img, this_path):
     # if not automatically downloaded, get it from:
     # http://sourceforge.net/projects/dclib/files/dlib/v18.10/shape_predictor_68_face_landmarks.dat.bz2
-    print this_path
+    print (this_path)
     predictor_path = this_path + "/dlib_models/shape_predictor_68_face_landmarks.dat"
-    print predictor_path
+    print (predictor_path)
     detector = dlib.get_frontal_face_detector()
     predictor = dlib.shape_predictor(predictor_path)
 

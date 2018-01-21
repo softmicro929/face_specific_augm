@@ -61,7 +61,7 @@ class FaceModel:
             cv2.line(eyemask,(eyeLefPix[0,i],eyeLefPix[1,i]),(eyeLefPix[0,(i+1)%eyeLefPix.shape[1]],\
                 eyeLefPix[1,(i+1)%eyeLefPix.shape[1]]),(255,255,255),width)
 
-        contours, hierarchy = cv2.findContours(eyemask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+        _, contours, hierarchy = cv2.findContours(eyemask,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
         eyemaskfill = np.zeros((self.ref_U.shape[0],self.ref_U.shape[1], 3))
 
         for r in range(self.ref_U.shape[0]):

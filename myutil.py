@@ -34,16 +34,16 @@ def parse(argv):
 	        head, tail = os.path.split(argv[1])
 	        fileList = [tail.split('.')[0]+','+str(argv[1])+','+str(argv[2])]
 	    else:
-	        print '> Batch mode detected - reading from file: ' + str(argv[2])
+	        print ('> Batch mode detected - reading from file: ' + str(argv[2]))
 	        filep = str(argv[2])
 	        fileList = [line.strip() for line in open(filep)]
 	else:
-		print 'Usage for face rendering. See below'
-		print 'Usage: python demo.py <image-path>'
-		print 'Usage: python demo.py <image-path> <landmark-path>'
-		print 'Usage: python demo.py --batch <file-list-path>'
-		print 'where <file-list-path> is a csv file where each line has'
-		print 'image_key,<image-path>,<landmark-path> (lines that contain # are skipped)'
+		print ('Usage for face rendering. See below')
+		print ('Usage: python demo.py <image-path>')
+		print ('Usage: python demo.py <image-path> <landmark-path>')
+		print ('Usage: python demo.py --batch <file-list-path>')
+		print ('where <file-list-path> is a csv file where each line has')
+		print ('image_key,<image-path>,<landmark-path> (lines that contain # are skipped)')
 		exit(1)
 	return fileList, outputFolder
 
@@ -53,14 +53,14 @@ def isFrontal(pose):
 	return False
 
 def preload(this_path, pose_models_folder, pose_models,nSub):
-    print '> Preloading all the models for efficiency'
+    print ('> Preloading all the models for efficiency')
     allModels= dict()
     for posee in pose_models:
         ## Looping over the subjects
         for subj in range(1,nSub+1):
             pose =   posee + '_' + str(subj).zfill(2) +'.mat'
             # load detections performed by dlib library on 3D model and Reference Image
-            print "> Loading pose model in " + pose
+            print ("> Loading pose model in " + pose)
             #model3D = ThreeD_Model.FaceModel(this_path + "/models3d_new/" + pose, 'model3D')
             if '-00' in posee:
                     model3D = ThreeD_Model.FaceModel(this_path + pose_models_folder + pose, 'model3D', True)
@@ -79,23 +79,23 @@ def crop_face(img, cropping):
     if cropping is not None:
         img = img[cropping[1]:cropping[3],\
                cropping[0]:cropping[2],:]
-        print '> Cropping with: ', cropping
+        print ('> Cropping with: ', cropping)
     else:
-        print '> No Cropping'
+        print ('> No Cropping')
     return img
 
 def flipInCase(img, lmarks, allModels):
 	## Check if we need to flip the image
 	yaws= []#np.zeros(1,len(allModels))
 	## Getting yaw estimate over poses and subjects
-	for mmm in allModels.itervalues():
+	for mmm in allModels.values():
 		proj_matrix, camera_matrix, rmat, tvec = calib.estimate_camera(mmm, lmarks[0])
 		yaws.append( calib.get_yaw(rmat) )
 	yaws=np.asarray(yaws)
 	yaw = yaws.mean()
-	print '> Yaw value mean: ',  yaw
+	print ('> Yaw value mean: ',  yaw)
 	if yaw  < 0:
-	    print '> Positive yaw detected, flipping the image'
+	    print ('> Positive yaw detected, flipping the image')
 	    img = cv2.flip(img,1)
 	    # Flipping X values for landmarks
 	    lmarks[0][:,0] = img.shape[1] - lmarks[0][:,0]
@@ -192,5 +192,5 @@ def decideSide_from_db(img, pose_Rt, allModels):
 	mm = allModels.values()[0]
 	proj_matrix, camera_matrix, rmat, tvec = calib.estimate_camera(mm, pose_Rt, pose_db_on=True)
 	yaw =  calib.get_yaw(rmat)
-	print '> Yaw value mean: ',  yaw
+	print ('> Yaw value mean: ',  yaw)
 	return yaw
